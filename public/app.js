@@ -1,4 +1,6 @@
-"use strict";
+import { Invoice } from "./classes/Invoice.js";
+import { Payment } from "./classes/Payment.js";
+import { ListTemplate } from "./classes/ListTemplate.js";
 // Form
 const form = document.querySelector('.new-item-form');
 // Inputs
@@ -6,21 +8,16 @@ const typeSelector = document.querySelector('#type');
 const toFrom = document.querySelector('#tofrom');
 const details = document.querySelector('#details');
 const amount = document.querySelector('#amount');
-// classes
-class Invoice {
-    constructor(c, d, a) {
-        this.client = c;
-        this.detail = d;
-        this.amount = a;
-    }
-    format() {
-        console.log(`${this.client} owes ${this.amount} for ${this.detail}`);
-    }
-}
-const firstInvoice = new Invoice('Reza', 'Gym', 250);
-firstInvoice.format();
-console.log(firstInvoice);
+const ul = document.querySelector("ul");
+const list = new ListTemplate(ul);
 form.addEventListener('submit', (e) => {
     e.preventDefault();
-    console.log(typeSelector.value, toFrom.value, details.value, amount.valueAsNumber);
+    let document;
+    if (typeSelector.value === 'invoice') {
+        document = new Invoice(toFrom.value, details.value, amount.valueAsNumber);
+    }
+    else {
+        document = new Payment(toFrom.value, details.value, amount.valueAsNumber);
+    }
+    list.render(document, typeSelector.value, "end");
 });
